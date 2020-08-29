@@ -11,8 +11,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.MessageFormat;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
@@ -93,9 +95,10 @@ public class StudentDatabase extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -354,15 +357,15 @@ public class StudentDatabase extends javax.swing.JFrame {
         });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 750, 160, 30));
 
-        jButton3.setBackground(new java.awt.Color(95, 158, 160));
-        jButton3.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
-        jButton3.setText("Exit");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButton7.setBackground(new java.awt.Color(95, 158, 160));
+        jButton7.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
+        jButton7.setText("Print");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButton7ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 750, 160, 30));
+        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 750, 160, 30));
 
         jButton4.setBackground(new java.awt.Color(95, 158, 160));
         jButton4.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
@@ -383,6 +386,16 @@ public class StudentDatabase extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 750, 160, 30));
+
+        jButton3.setBackground(new java.awt.Color(95, 158, 160));
+        jButton3.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
+        jButton3.setText("Exit");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 750, 160, 30));
 
         pack();
         setLocationRelativeTo(null);
@@ -409,6 +422,23 @@ public class StudentDatabase extends javax.swing.JFrame {
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        jTextArea1.append("Student Result Transcript\n"
+                +"==========================\n"
+                +"Student ID:\t\t\t" + jTextField2.getText()
+                +"Maths:\t\t\t" + jTextField6.getText()
+                +"\nEnglish:\t\t\t" + jTextField8.getText()
+                +"\nBiology:\t\t\t" + jTextField9.getText()
+                +"\nComputing:\t\t\t" + jTextField10.getText()
+                +"\nChemistry:\t\t\t" + jTextField12.getText()
+                +"\nPhysics:\t\t\t" + jTextField11.getText()
+                +"\nAdd Maths:\t\t\t" + jTextField13.getText()
+                +"\nBusiness:\t\t\t" + jTextField14.getText()
+                +"\n=========================="
+                +"\nTotal Score:\t\t\t" + jTextField4.getText()
+                +"\nAverage:\t\t\t" + jTextField5.getText()
+                +"\nStatus:\t\t\t" + jTextField7.getText() + "\n"                    
+        
+        );
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -487,18 +517,36 @@ public class StudentDatabase extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private JFrame frame;
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        frame = new JFrame("Exit");
-        if(JOptionPane.showConfirmDialog(frame, "Confirm if you want to EXIT", "Student Data Base system", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION){
-        System.exit(0);
+        MessageFormat header = new MessageFormat("Printing in Progress");
+        MessageFormat footer = new MessageFormat("Page {0,number,integer}");
+        
+        try
+        {
+            jTable2.print(JTable.PrintMode.NORMAL, header, footer);        
         }
-        
-        
-    }//GEN-LAST:event_jButton3ActionPerformed
+        catch(java.awt.print.PrinterException e)
+        {
+            System.err.format("No Printer Found", e.getMessage());       
+        }       
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        if(jTable2.getSelectedRow() == -1){
+            if(jTable2.getRowCount() == 0){
+                JOptionPane.showMessageDialog(null,"No records to Delete","Student Database System",JOptionPane.OK_OPTION);
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"Select a row to Delete","Student Database System",JOptionPane.OK_OPTION);
+            }
+        }
+        else{
+            model.removeRow(jTable2.getSelectedRow());
+        }
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -606,6 +654,14 @@ public class StudentDatabase extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField13ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        frame = new JFrame("Exit");
+        if(JOptionPane.showConfirmDialog(frame, "Confirm if you want to EXIT", "Student Data Base system", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION){
+        System.exit(0);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -686,6 +742,7 @@ public class StudentDatabase extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
